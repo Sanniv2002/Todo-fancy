@@ -17,7 +17,6 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
 
     try{
         const decoded:any = jwt.verify(token, SECRET_KEY)
-        console.log("Verification Successfull", decoded)
         req.id = decoded.id
         next()
     }

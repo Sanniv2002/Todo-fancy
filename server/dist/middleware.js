@@ -14,7 +14,6 @@ const authMiddleware = (req, res, next) => {
     const token = authHeader.split(' ')[1];
     try {
         const decoded = jsonwebtoken_1.default.verify(token, config_1.default);
-        console.log("Verification Successfull", decoded);
         req.id = decoded.id;
         next();
     }

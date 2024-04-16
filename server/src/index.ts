@@ -68,7 +68,6 @@ app.post("/signin", async (req, res) => {
 app.post("/user/todo", authMiddleware, async (req:AuthRequest, res) => {
     const { title, description } = req.body;
     const userId = req.id;
-    console.log("User id ", userId)
 
     try {
         const user = await prisma.user.findUnique({
@@ -76,7 +75,6 @@ app.post("/user/todo", authMiddleware, async (req:AuthRequest, res) => {
                 id: userId
             }
         });
-        console.log(user)
 
         if (!user) {
             return res.status(404).json({ error: "User not found" });
@@ -111,7 +109,6 @@ app.get("/bulk",authMiddleware, async (req:AuthRequest, res) => {
     id: 'asc', // Sort by ID in ascending order
   }
     })
-    console.log(response)
     res.status(200).json(response)
 })
 
@@ -136,7 +133,6 @@ app.put("/user/todo", authMiddleware, async (req, res) => {
     try{
         const { id } = req.body
         const _id = parseInt(id)
-        console.log(_id)
         const response = await prisma.todo.update({
             where:{
                 id: _id
@@ -153,6 +149,27 @@ app.put("/user/todo", authMiddleware, async (req, res) => {
         })
     }
 
+})
+
+app.put("/user/todo/update", authMiddleware, async (req, res) => {
+    try{
+        const { id, title } = req.body
+        const _id = parseInt(id)
+        const response = await prisma.todo.update({
+            where:{
+                id: _id
+            },
+            data:{
+                title: title
+            }
+        })
+        res.status(200).send(response)
+    }
+    catch (e){
+        res.json({
+            message: "Internal Server Error"
+        })
+    }
 })
 
 app.listen(3000, () => console.log("Server running on port 3000"))

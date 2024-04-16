@@ -72,14 +72,12 @@ app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 app.post("/user/todo", middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, description } = req.body;
     const userId = req.id;
-    console.log("User id ", userId);
     try {
         const user = yield prisma.user.findUnique({
             where: {
                 id: userId
             }
         });
-        console.log(user);
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
@@ -110,7 +108,6 @@ app.get("/bulk", middleware_1.authMiddleware, (req, res) => __awaiter(void 0, vo
             id: 'asc', // Sort by ID in ascending order
         }
     });
-    console.log(response);
     res.status(200).json(response);
 }));
 app.delete("/user/todo", middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -132,13 +129,32 @@ app.put("/user/todo", middleware_1.authMiddleware, (req, res) => __awaiter(void 
     try {
         const { id } = req.body;
         const _id = parseInt(id);
-        console.log(_id);
         const response = yield prisma.todo.update({
             where: {
                 id: _id
             },
             data: {
                 done: true
+            }
+        });
+        res.status(200).send(response);
+    }
+    catch (e) {
+        res.json({
+            message: "Internal Server Error"
+        });
+    }
+}));
+app.put("/user/todo/update", middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id, title } = req.body;
+        const _id = parseInt(id);
+        const response = yield prisma.todo.update({
+            where: {
+                id: _id
+            },
+            data: {
+                title: title
             }
         });
         res.status(200).send(response);
