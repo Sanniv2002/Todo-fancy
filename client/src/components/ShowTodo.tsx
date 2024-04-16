@@ -24,6 +24,8 @@ export default function showTodo(
         <div className="inline-flex items-center">
         <input
         defaultValue={todo.title}
+        //@ts-ignore
+        ref={editRef}
         onChange={(e) => editRef.current = e.target.value}
             className="bg-[#25273c] mr-4 text-white text-lg px-4 py-2.5 rounded-md border border-gray-500"
             style={{ textDecoration: todo.done ? "line-through" : "none" }}
