@@ -55,7 +55,7 @@ export default function Login() {
                 <form className='flex flex-col' onSubmit={handleSubmit(onSubmit)}>
                     <input placeholder='email' className='text-white bg-gray-900 mx-10 mt-6 rounded-md p-2' {...register("email", {required: true })} />
                     {errors.email && <span className='mx-10 text-red-500 text-xs'>This field is required</span>}
-                    <input placeholder='password' className='text-white bg-gray-900 mx-10 mt-3 rounded-md p-2' {...register("password", {required: true, minLength: 8, maxLength: 20})} />
+                    <input placeholder='password' type='password' className='text-white bg-gray-900 mx-10 mt-3 rounded-md p-2' {...register("password", {required: true, minLength: 8, maxLength: 20})} />
                     {errors.password && <span className='mx-10 text-red-500 text-xs'>This field is required</span>}
                     <input className=' bg-gray-400 mx-10 mt-10 mb-9 rounded-md p-2 hover:text-white hover:bg-gray-500 transition-colors duration-300 hover:cursor-pointer' type="submit" />
                 </form>

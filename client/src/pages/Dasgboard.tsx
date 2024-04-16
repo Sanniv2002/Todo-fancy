@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import ShowTodo from "../components/ShowTodo";
 
@@ -20,6 +20,8 @@ export default function Dashboard() {
 
   const [todos, setTodos] = useState<TodosArray>();
   const [input, setInput] = useState<string>("");
+  const [edit, setEdit] = useState<Number>(0);
+  const editRef = useRef("")
   //This hook is used explicitly to re-render the app when a todo is marked as completed, this is not a good method.
   const [forceRender, setForceRender] = useState<boolean>(false);
 
@@ -28,12 +30,12 @@ export default function Dashboard() {
     const todos = await axios.get("http://localhost:3000/bulk", { headers });
     setTodos(todos.data);
   };
-
+  console.log(editRef.current)
   //Initially load all the todos and re-render when any of the todo gets marked as done
   useEffect(() => {
     getTodos();
   }, [forceRender]);
-
+  
   if (headers.Authorization) {
     return (
       <div className="bg-[#181824] h-screen flex flex-col items-center justify-center">
@@ -67,18 +69,9 @@ export default function Dashboard() {
         {/* Todos Renderer, very bad fix for the re-render thingy */}
         <div className="flex flex-col gap-3">
           {todos?.map((todo) => (
-            <div
-              onClick={() =>
-                axios
-                  .put(
-                    `http://localhost:3000/user/todo`,
-                    { id: todo.id },
-                    { headers }
-                  )
-                  .then(() => setForceRender(!forceRender))
-              }
+            <div key={todo.id}
             >
-              {ShowTodo(todo)}
+              {ShowTodo(todo, setForceRender, forceRender, headers, setEdit, edit, editRef)}
             </div>
           ))}
         </div>
